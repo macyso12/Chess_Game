@@ -23,24 +23,22 @@ QUEENING_TEST = [
     [Coord(3,1), Coord(2,0)]
 ]
 
+def clearGame(g:Game):
+    for c in [Coord(x,y) for x in range(8) for y in range(8)]:
+        g.setSquare(c, Piece())
 
 if __name__ == "__main__":
     g = Game()
+    clearGame(g)
     printGame(g)
-
-    for move in QUEENING_TEST:
-        if(g.makeMove(move[0], move[1])):
-            print("Able to make move")
-        else:
-            print("Unable to make move")
-        printGame(g)
-        if(g.isCheckMate(0)):
-            print("White wins by getting checkmated!")
-            break
-        if(g.isCheckMate(1)):
-            print("Black wins by getting checkmated!")
-            break
-        print("Black in check:",g.kingInCheck(1))
-        print("Score:",g.getScore())
+    # for move in QUEENING_TEST:
+    #     if(g.makeMove(move[0], move[1])):
+    #         print("Able to make move")
+    #     else:
+    #         print("Unable to make move")
+    #     printGame(g)
+        
+    #     print("Black in check:",g.kingInCheck(1))
+    #     print("Score:",g.getScore())
     for move in g.log:
         print(f"{move[0]} -> {move[1]}")

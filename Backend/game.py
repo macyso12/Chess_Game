@@ -290,7 +290,7 @@ class Game:
 
 		return total
 				
-		
+	
 	def debugPrint(self):
 		for row in self.board:
 			for val in row:
