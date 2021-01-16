@@ -29,9 +29,9 @@ def chooseSprite(p:Piece):
 def printGame(g:Game):    
     b = g.board
     print(Style.BRIGHT,end="")
-    print(Fore.RED+"     Black  "+Fore.RESET)
-    print("   01234567")
-    print("  "+"▄"*10)
+    print(Fore.RED+"        Black  "+Fore.RESET)
+    print("    0 1 2 3 4 5 6 7")
+    print("  "+"▄"*18)
     for y in range(len(b)):
         print(f"{y} █", end="")
         for x in range(len(b[y])):
@@ -40,18 +40,18 @@ def printGame(g:Game):
                 print(Fore.RED,end="")
             elif(b[y][x].team == 0):
                 print(Fore.BLUE,end="")
-            print((b[y][x].name.upper()[0] if b[y][x].name != "knight" else "H") if b[y][x].team != -1 else " ", end ="")
+            print(chooseSprite(b[y][x]), end =" ")
             print(Back.RESET+Fore.RESET,end = "")
         print("█")
-    print("  "+"▀"*10)
-    print(Fore.BLUE+"     White  "+Fore.RESET)
+    print("  "+"▀"*18)
+    print(Fore.BLUE+"        White  "+Fore.RESET)
     print(Style.RESET_ALL,end="")
 
 def printPossibleMoves(g:Game, c:Coord):
     moves = g.getPossibleMoves(c)
     b = g.board
     print(Style.BRIGHT,end="")
-    print(Fore.RED+"     Black  "+Fore.RESET)
+    print(Fore.RED+"        Black  "+Fore.RESET)
     print("    0 1 2 3 4 5 6 7")
     print("  "+"▄"*18)
     for y in range(len(b)):
@@ -70,14 +70,14 @@ def printPossibleMoves(g:Game, c:Coord):
             print(Back.RESET+Fore.RESET,end = "")
         print("█")
     print("  "+"▀"*18)
-    print(Fore.BLUE+"     White  "+Fore.RESET)
+    print(Fore.BLUE+"        White  "+Fore.RESET)
     print(Style.RESET_ALL,end="")
 
 def printValidMoves(g:Game, c:Coord):
     moves = g.getValidMoves(c)
     b = g.board
     print(Style.BRIGHT,end="")
-    print(Fore.RED+"     Black  "+Fore.RESET)
+    print(Fore.RED+"        Black  "+Fore.RESET)
     print("    0 1 2 3 4 5 6 7")
     print("  "+"▄"*18)
     for y in range(len(b)):
@@ -96,7 +96,7 @@ def printValidMoves(g:Game, c:Coord):
             print(Back.RESET+Fore.RESET,end = "")
         print("█")
     print("  "+"▀"*18)
-    print(Fore.BLUE+"     White  "+Fore.RESET)
+    print(Fore.BLUE+"        White  "+Fore.RESET)
     print(Style.RESET_ALL,end="")
 
     

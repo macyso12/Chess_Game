@@ -115,10 +115,10 @@ class Game:
 			deltas = [Coord(-1, 0)+forwards, Coord(1, 0)+forwards]
 			for delta in deltas:
 				t = c+delta
-				print("Coord:",t)
-				print("Square:",self.getSquare(t))
-				print("Team:",self.getSquare(t).team)
-				if self.getSquare(t).team == enemyTeam:
+				# print("Coord:",t)
+				# print("Square:",self.getSquare(t))
+				# print("Team:",self.getSquare(t).team)
+				if t.isValid() and self.getSquare(t).team == enemyTeam:
 					out.append(t)
 			"""Add en passant if extra time"""
 			return out
@@ -142,6 +142,7 @@ class Game:
 		possible = self.getPossibleMoves(c)
 		out = []
 		for move in possible:
+			# print("Move:",move)
 			if(self.checkValid(c, move)):
 				out.append(c)
 		return out
