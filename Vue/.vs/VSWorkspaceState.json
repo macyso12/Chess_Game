@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\src",
+    "\\src\\assets",
     "\\src\\components"
   ],
-  "SelectedNode": "\\src\\components\\HelloWorld.vue",
+  "SelectedNode": "\\src\\assets\\word.jpg",
   "PreviewInSolutionExplorer": false
 }
