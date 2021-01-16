@@ -131,6 +131,16 @@ class Game:
 			if self.getSquare(c).name == "king":
 				self.kings[self.getSquare(c).team] = c
 
+	def kingInCheck(self, team:int):
+		enemy = 1 if team==0 else 0
+		self.updateKingPos()
+		for tempC in [Coord(x,y) for x in range(8) for y in range(8)]:
+			if self.getSquare(tempC).team == enemy:
+				if(self.kings[enemy] in self.getPossibleMoves(tempC)):
+					print(" > ",self.getSquare(tempC))
+					return True
+		return False
+
 	def checkValid(self, c:Coord, to:Coord):
 		if(c == to):
 			return False
@@ -139,40 +149,69 @@ class Game:
 		oldRef = self.getSquare(to)
 		oldPiece = Piece(oldRef.name, oldRef.team, oldRef.id, oldRef.timeMoved)
 		self.movePiece(c, to)
-		if(self.getSquare(to).name == "king"):
+		if(self.getSquare(to).name == "king" or self.getSquare(c).name == "king"):
 			self.updateKingPos()
 		
-		out = True
-		for tempC in [Coord(x,y) for x in range(8) for y in range(8)]:
-			if(self.getSquare(tempC).team == enemy):
-				if(self.kings[team] in self.getPossibleMoves(tempC)):
-					out = False
-					break
+		out = self.kingInCheck(enemy)
+		
 		self.movePiece(to, c)
 		self.setSquare(to, oldPiece)
+		# if(out == True):
+			# self.debugPrint()
 		return out
+	
+	# def checkValid(self, c:Coord, to:Coord):
+	# 	if(c == to):
+	# 		return False
+	# 	team = self.getSquare(c).team
+	# 	enemy = 1 if team == 0 else 0
+	# 	oldRef = self.getSquare(to)
+	# 	oldPiece = Piece(oldRef.name, oldRef.team, oldRef.id, oldRef.timeMoved)
+	# 	self.movePiece(c, to)
+	# 	if(self.getSquare(to).name == "king" or self.getSquare(c).name == "king"):
+	# 		self.updateKingPos()
+		
+	# 	out = True
+	# 	for tempC in [Coord(x,y) for x in range(8) for y in range(8)]:
+	# 		if(self.getSquare(tempC).team == enemy):
+	# 			if(self.kings[team] in self.getPossibleMoves(tempC)):
+	# 				out = False
+	# 				break
+	# 	self.movePiece(to, c)
+	# 	self.setSquare(to, oldPiece)
+	# 	# if(out == True):
+	# 		# self.debugPrint()
+	# 	return out
+	
 	
 	def isCheckMate(self, team):
 		for tempC in [Coord(x,y) for x in range(8) for y in range(8)]:
 			if(self.getSquare(tempC).team == team):
 				if(len(self.getValidMoves(tempC))>0):
+					print(self.getSquare(tempC))
+					print(tempC,"can move to",[str(v) for v in self.getValidMoves(tempC)])
 					return False
 		return True
-			
+	
 
 	def getValidMoves(self, c:Coord):
 		possible = self.getPossibleMoves(c)
-		print([str(x) for x in possible])
+		# print([str(x) for x in possible])
 		out = []
 		for move in possible:
 			# print("Move:",move)
 			if(self.checkValid(c, move)):
+				# self.debugPrint()
 				out.append(move)
 		return out
 
 	def movePiece(self, fromC:Coord, toC:Coord):
 		# print("Moving from:",fromC)
 		# print("Moving to  :",toC)
+		if self.getSquare(fromC).name == "king":
+			self.updateKingPos()
+		elif self.getSquare(toC).name == "king":
+			self.updateKingPos()
 		self.setSquare(toC, self.getSquare(fromC))
 		self.setSquare(fromC, Piece())
 
@@ -186,3 +225,11 @@ class Game:
 			raise Exception("Invalid set, out of bounds: Tried to get at "+str(c))
 		self.board[c.y][c.x] = Piece(p.name, p.team, p.id, p.timeMoved)
 
+	def debugPrint(self):
+		for row in self.board:
+			for val in row:
+				if(val.team!=-1):
+					print(val.name[0],end="")
+				else:
+					print(" ",end="")
+			print()
