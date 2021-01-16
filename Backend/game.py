@@ -172,6 +172,7 @@ class Game:
 				if self.getSquare(tCoord).team==enemy:
 					if self.getSquare(tCoord).name in ["rook", "queen"]:
 						return True
+					break
 				tCoord = tCoord+dir
 
 		deltaDirs = [
@@ -186,6 +187,7 @@ class Game:
 				if self.getSquare(tCoord).team==enemy:
 					if self.getSquare(tCoord).name in ["bishop", "queen"]:
 						return True
+					break
 				tCoord = tCoord+dir
 
 		return False
@@ -237,6 +239,7 @@ class Game:
 			self.updateKingPos()
 		self.setSquare(toC, self.getSquare(fromC))
 		self.setSquare(fromC, Piece())
+		
 
 	def getSquare(self, c:Coord):
 		if(c.isValid() == False):
@@ -257,14 +260,37 @@ class Game:
 		if(self.getSquare(fromC).team != self.turn):
 			return False
 		
-			
+
 		self.turnCount+=1
 		self.movePiece(fromC, toC)
 		self.log.append([fromC, toC])
 		self.board[toC.y][toC.x].timeMoved = self.turnCount
+		queeningRank = 8*self.getSquare(toC).team
+		if self.getSquare(toC).name == "pawn" and toC.y == queeningRank:
+			self.board[toC.y][toC.x].name = "queen"
 		self.turn = 0 if self.turn == 1 else 1
 		return True
 
+	def getScore(self):
+		pointVals = {
+			"queen" :9,
+			"rook"  :5,
+			"bishop":3,
+			"knight":3,
+			"pawn"  :1,
+			"king"  :0
+		}
+		total = 0
+		for c in [Coord(x,y) for x in range(8) for y in range(8)]:
+			t = self.getSquare(c)
+			if t.team == 1:
+				total+=pointVals[t.name]
+			elif t.team == 0:
+				total-=pointVals[t.name]
+
+		return total
+				
+		
 	def debugPrint(self):
 		for row in self.board:
 			for val in row:
