@@ -17,6 +17,10 @@ class Game:
 		for i in range(8):
 			self.board[7][i] = Piece(pieces[i], 0, currId, 0)
 			currId+=1
+		self.kings = [None,None]
+		for c in [Coord(x,y) for x in range(8) for y in range(8)]:
+			if self.getSquare(c).name == "king":
+				self.kings[self.getSquare(c).team] = c
 	
 	def getPossibleMoves(self, c:Coord):
 		if(c.isValid() == False):
@@ -111,10 +115,41 @@ class Game:
 			deltas = [Coord(-1, 0)+forwards, Coord(1, 0)+forwards]
 			for delta in deltas:
 				t = c+delta
+				print("Coord:",t)
+				print("Square:",self.getSquare(t))
+				print("Team:",self.getSquare(t).team)
 				if self.getSquare(t).team == enemyTeam:
 					out.append(t)
 			"""Add en passant if extra time"""
 			return out
+	
+	def checkValid(self, c:Coord, to:Coord):
+		team = self.getSquare(c).team
+		enemy = 1 if team == 0 else 0
+		oldPiece = self.getSquare(to)
+		self.movePiece(c, to)
+		out = True
+		for c in [Coord(x,y) for x in range(8) for y in range(8)]:
+			if(self.getSquare(c).team == enemy):
+				if(self.kings[team] in self.getPossibleMoves(c)):
+					out = False
+					break
+		self.movePiece(to, c)
+		self.setSquare(to, oldPiece)
+		return out
+	
+	def getValidMoves(self, c:Coord):
+		possible = self.getPossibleMoves(c)
+		out = []
+		for move in possible:
+			if(self.checkValid(c, move)):
+				out.append(c)
+		return out
+
+	def movePiece(self, fromC:Coord, toC:Coord):
+		self.setSquare(toC, self.getSquare(fromC))
+		self.setSquare(fromC, Piece())
+
 	def getSquare(self, c:Coord):
 		if(c.isValid() == False):
 			return -1
