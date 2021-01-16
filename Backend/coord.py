@@ -14,3 +14,6 @@ class Coord:
         out.x+=other.x
         out.y+=other.y
         return out
+    
+    def __eq__(self, other):
+        return self.x==other.x and self.y == other.y
