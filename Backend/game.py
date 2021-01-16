@@ -1,5 +1,6 @@
 from coord import Coord
 from piece import Piece
+from collections import Counter
 
 class Game:
 	def __init__(self):
@@ -209,8 +210,19 @@ class Game:
 		# if(out == True):
 			# self.debugPrint()
 		return out
-		
+
+	def isStaleMate(self, team):
+		for tempC in [Coord(x,y) for x in range(8) for y in range(8)]:
+			if(self.getSquare(tempC).team == team):
+				if(len(self.getValidMoves(tempC))>0):
+					# print(self.getSquare(tempC))
+					# print(tempC,"can move to",[str(v) for v in self.getValidMoves(tempC)])
+					return False
+		return True
+
 	def isCheckMate(self, team):
+		if(self.kingInCheck(team)==False):
+			return False
 		for tempC in [Coord(x,y) for x in range(8) for y in range(8)]:
 			if(self.getSquare(tempC).team == team):
 				if(len(self.getValidMoves(tempC))>0):
@@ -239,6 +251,9 @@ class Game:
 			self.updateKingPos()
 		self.setSquare(toC, self.getSquare(fromC))
 		self.setSquare(fromC, Piece())
+		
+	def checkRepetition(self):
+		c = Counter(self.log)
 		
 
 	def getSquare(self, c:Coord):
