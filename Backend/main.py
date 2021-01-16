@@ -10,19 +10,17 @@ def clearGame(g:Game):
 
 if __name__ == "__main__":
     g = Game()
-    clearGame(g)
 
-    g.setSquare(Coord(0,4), Piece("king", 0, 1, 0))
-    g.setSquare(Coord(6,6), Piece("king", 1, 2, 0))
     printGame(g)
-    for move in testSets.REPETITION_TEST:
+    for move in testSets.QUEENING_TEST:
         if(g.makeMove(move[0], move[1])):
             print("Able to make move")
         else:
             print("Unable to make move")
         printGame(g)
         
-        print("Score:",g.getScore())
-        # print("Repetition stalemate:",g.checkRepetition())
+        if(g.winner!=-1):
+            print(g.winner, "won!")
+            break
     for move in g.log:
-        print(f"Move [{move[2]}] {move[0]} -> {move[1]}")
+        print(f"Move [{move[2]}] {move[0]} -> {move[1]}    Score: {move[3]}")

@@ -25,8 +25,9 @@ class Game:
 		
 		self.turnCount = 0
 		self.turn = 0
-
+		self.SCORETHRESHOLD = 15
 		self.log = []
+		self.winner = -1
 		
 	
 	def getPossibleMoves(self, c:Coord):
@@ -252,13 +253,24 @@ class Game:
 		self.setSquare(fromC, Piece())
 		
 	def checkRepetition(self):
+		if len(self.log)<6:
+			return False
 		count = self.log.count(self.log[-1])
 		if count<3:
 			return False
 		count = self.log.count(self.log[-2])
 		if count<3:
 			return False
-		return True	
+		return True
+
+	def checkInactivity(self):
+		if len(self.log)<50:
+			return False
+		val = self.log[-1][3]
+		for i in range(49):
+			if(self.log[-i][4] != val):
+				return False
+		return True
 
 	def getSquare(self, c:Coord):
 		if(c.isValid() == False):
@@ -271,6 +283,7 @@ class Game:
 		self.board[c.y][c.x] = Piece(p.name, p.team, p.id, p.timeMoved)
 
 	def makeMove(self, fromC:Coord, toC:Coord): #True if move went through
+		self.updateWinner()
 		try:
 			if toC not in self.getValidMoves(fromC):
 				return False
@@ -282,12 +295,13 @@ class Game:
 
 		self.turnCount+=1
 		self.movePiece(fromC, toC)
-		self.log.append([fromC, toC, self.getSquare(toC).id])
+		self.log.append([fromC, toC, self.getSquare(toC).id, self.getScore()])
 		self.board[toC.y][toC.x].timeMoved = self.turnCount
 		queeningRank = 8*self.getSquare(toC).team
 		if self.getSquare(toC).name == "pawn" and toC.y == queeningRank:
 			self.board[toC.y][toC.x].name = "queen"
 		self.turn = 0 if self.turn == 1 else 1
+		self.updateWinner()
 		return True
 
 	def getScore(self):
@@ -308,7 +322,32 @@ class Game:
 				total-=pointVals[t.name]
 
 		return total
-				
+	
+	def updateWinner(self):
+		if self.winner == -1:
+			if self.checkWin():
+				self.winner = self.turn
+
+	def checkWin(self):
+		current = self.turn
+		if self.checkRepetition():
+			print("Win by repetition")
+			return True
+		if self.checkInactivity():
+			print("Win by inactivity")
+			return True
+		if self.isCheckMate(current):
+			print("Win by checkmate")
+			return True
+		if self.isStaleMate(current):
+			print("Win by stalemate")
+			return True
+		scoreMod = 1 if current == 0 else -1
+		if scoreMod*self.getScore() > self.SCORETHRESHOLD:
+			print("Win by score")
+			return True
+		return False
+		
 	
 	def debugPrint(self):
 		for row in self.board:

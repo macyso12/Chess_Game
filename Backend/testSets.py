@@ -33,3 +33,4 @@ REPETITION_TEST = [
     [Coord(0,5), Coord(0,4)],
     [Coord(5,5), Coord(6,6)]
 ]
+
