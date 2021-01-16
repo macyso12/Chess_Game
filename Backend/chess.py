@@ -68,6 +68,8 @@ class Game:
 
     def getMoves(self, x, y):
         p = self.board[y][x]
+        if(p.id == 0):
+            return []
         enemy = 0 if p.team ==1 else 1
         if p.type == "knight":
             deltas = [(1,2), (2,1), (2,-1), (1,-2), (-1,-2), (-2, -1), (-2, 1), (-1, 2)]
@@ -75,7 +77,7 @@ class Game:
             for delta in deltas:
                 newX = x+delta[0]
                 newY = y+delta[1]
-                if self.coordInBoard(newX, newY):
+                if self.coordInBoard(newX, newY) and self.board[newY][newX].team != p.team:
                     out.append((newX, newY))
             return out
         elif p.type == "queen":
@@ -121,9 +123,9 @@ class Game:
 
 if __name__ == '__main__':
     g = Game()
-    coord = (3, 4)
+    coord = (5, 3)
     g.board[1][3] = Piece()
-    g.board[3][4] = Piece("knight", 1, 12)
+    g.board[coord[1]][coord[0]] = Piece("queen", 1, 12)
     g.board[0][3] = Piece()
     g.debugPrint()
     print(g.board[coord[1]][coord[0]].toStr())
