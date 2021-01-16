@@ -3,11 +3,12 @@ class Piece:
         self.type = pieceType #type
         self.team = team #0 if white, 1 if black
         self.id = id     #Individual piece, if placeholder then 0, if piece, 1->32
+        self.lastTimeMoved = 0
     
     def toStr(self):
         if self.id == 0:
             return {"type":"null"}
-        return {"type":self.type, "team":self.team, "id":self.id}
+        return {"type":self.type, "team":self.team, "id":self.id, "last moved":self.lastTimeMoved}
 
 class Game:
     def __init__(self):
@@ -21,6 +22,8 @@ class Game:
             self.board[6][i-17] = Piece("pawn", 0, i)
         for i in range(25,33):
             self.board[7][i-25] = Piece(pieces[i-25], 0, i)
+
+        self.time = 0
                 
     def debugPrint(self):
         printMap = {
@@ -115,6 +118,24 @@ class Game:
                         out.append((dX,dY))
                         break
                     out.append((dX,dY))
+            return out
+        elif p.type == "pawn":
+            out =[]
+            dY = -1 if p.team ==0 else 1
+            captures = [(-1, dY), (1, dY)]
+            for move in captures:
+                if(self.coordInBoard(move[0], move[1]) and self.board[y+move[1]][x+move[0]].team != -1):
+                    out.append(y+move[1], x+move[0])
+            if self.coordInBoard(x, y+dY) and self.board[y+dY][x].team == -1:
+                out.append(y+dY, x)
+                if p.lastTimeMoved == 0:
+                    if self.board[y+2*dY][x].team == -1:
+                        out.append(y+2*dY, x)
+            "now en passant"
+            checkSquares = [(x+1, y), (x-1, y)]
+            for move in checkSquares:
+                if(self.coordInBoard(move[0], move[1])):
+                    if self.board[move[1]][move[0]]
             return out
 
         return "error"
