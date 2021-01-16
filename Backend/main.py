@@ -77,7 +77,7 @@ def printPossibleMoves(g:Game, c:Coord):
 if __name__ == "__main__":
     g = Game()
     printGame(g)
-    c = Coord(4,3)
-    g.setSquare(c, Piece("king", 0, 3, 0))
+    c = Coord(4,6)
+    g.setSquare(c, Piece("pawn", 1, 3, 1))
     printPossibleMoves(g, c)
     
