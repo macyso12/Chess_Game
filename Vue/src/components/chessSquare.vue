@@ -1,37 +1,30 @@
 <template>
-    <h1>
-        {{color}}
-    </h1>
-    <div class="chessSquare">
-        <div id="app">
-            <img src="@/assets/blackSquare.png" />
-        </div>
-    </div>
+    <span class="row">
+        <span v-if="({{row}}+{{col}})%2==0">
+            <img src="@/assets/bord.png" />
+        </span>
+        <span v-else>
+            <img src="@/assets/word.jpg" />
+        </span>
+    </span>
 </template>
 
 <script>
     export default {
         name: 'chessSquare',
         props: {
-            color: Number
+            row: Number,
+            col: Number
+            total = row+col
         }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+    .square img {
+        width: 100%;
+        height: 3vw;
+        object-fit: cover;
+    }
 </style>
