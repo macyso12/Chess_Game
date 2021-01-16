@@ -125,6 +125,7 @@ class Game:
 					out.append(t)
 			"""Add en passant if extra time"""
 			return out
+		raise Exception("Tried to get move at non piece square "+str(c))
 	
 	def updateKingPos(self):
 		for c in [Coord(x,y) for x in range(8) for y in range(8)]:
@@ -134,25 +135,69 @@ class Game:
 	def kingInCheck(self, team:int):
 		enemy = 1 if team==0 else 0
 		self.updateKingPos()
-		for tempC in [Coord(x,y) for x in range(8) for y in range(8)]:
-			if self.getSquare(tempC).team == enemy:
-				if(self.kings[enemy] in self.getPossibleMoves(tempC)):
-					print(" > ",self.getSquare(tempC))
-					return True
-		return False
+		kingC = self.kings[team]
+		
+		knightSquares = [
+			Coord(-2, 1), Coord(-1,2),
+			Coord(1, 2), Coord(2,1),
+			Coord(2, -1), Coord(1,-2),
+			Coord(-1, -2), Coord(-2,-1)
+		]
+		for tCoord in [kingC+delta for delta in knightSquares if (kingC+delta).isValid()]:
+			if self.getSquare(tCoord).team == enemy and self.getSquare(tCoord).name == "knight":
+				return True
+		forward = -1 if team == 0 else 1
+		pawnSquares = [
+			Coord(-1, forward), Coord(1,forward)
+		]
+		
+		for tCoord in [kingC+delta for delta in pawnSquares if (kingC+delta).isValid()]:
+			# print(self.getSquare(tCoord))
+			if self.getSquare(tCoord).team == enemy and self.getSquare(tCoord).name == "pawn":
+				return True
 
+		deltaDirs = [
+			Coord(0, 1), Coord(1, 0), 
+			Coord(0, -1), Coord(-1, 0)
+		]
+		for dir in deltaDirs:
+			tCoord = kingC + dir
+			while tCoord.isValid():
+				if self.getSquare(tCoord).team==team:
+					break
+				if self.getSquare(tCoord).team==enemy:
+					if self.getSquare(tCoord).name in ["rook", "queen"]:
+						return True
+				tCoord = tCoord+dir
+
+		deltaDirs = [
+			Coord(1, 1), Coord(1, -1), 
+			Coord(-1, 1), Coord(-1, -1)
+		]
+		for dir in deltaDirs:
+			tCoord = kingC + dir
+			while tCoord.isValid():
+				if self.getSquare(tCoord).team==team:
+					break
+				if self.getSquare(tCoord).team==enemy:
+					if self.getSquare(tCoord).name in ["bishop", "queen"]:
+						return True
+				tCoord = tCoord+dir
+
+		return False
+				
+		
 	def checkValid(self, c:Coord, to:Coord):
 		if(c == to):
 			return False
 		team = self.getSquare(c).team
-		enemy = 1 if team == 0 else 0
 		oldRef = self.getSquare(to)
 		oldPiece = Piece(oldRef.name, oldRef.team, oldRef.id, oldRef.timeMoved)
 		self.movePiece(c, to)
-		if(self.getSquare(to).name == "king" or self.getSquare(c).name == "king"):
-			self.updateKingPos()
 		
-		out = self.kingInCheck(enemy)
+		out = not self.kingInCheck(team)
+		# if out == True:
+		# 	self.debugPrint()
 		
 		self.movePiece(to, c)
 		self.setSquare(to, oldPiece)
