@@ -24,6 +24,10 @@ class Game:
 				self.kings[self.getSquare(c).team] = c
 		
 		self.turnCount = 0
+		self.turn = 0
+
+		self.log = []
+		
 	
 	def getPossibleMoves(self, c:Coord):
 		if(c.isValid() == False):
@@ -185,7 +189,6 @@ class Game:
 				tCoord = tCoord+dir
 
 		return False
-				
 		
 	def checkValid(self, c:Coord, to:Coord):
 		if(c == to):
@@ -204,40 +207,15 @@ class Game:
 		# if(out == True):
 			# self.debugPrint()
 		return out
-	
-	# def checkValid(self, c:Coord, to:Coord):
-	# 	if(c == to):
-	# 		return False
-	# 	team = self.getSquare(c).team
-	# 	enemy = 1 if team == 0 else 0
-	# 	oldRef = self.getSquare(to)
-	# 	oldPiece = Piece(oldRef.name, oldRef.team, oldRef.id, oldRef.timeMoved)
-	# 	self.movePiece(c, to)
-	# 	if(self.getSquare(to).name == "king" or self.getSquare(c).name == "king"):
-	# 		self.updateKingPos()
 		
-	# 	out = True
-	# 	for tempC in [Coord(x,y) for x in range(8) for y in range(8)]:
-	# 		if(self.getSquare(tempC).team == enemy):
-	# 			if(self.kings[team] in self.getPossibleMoves(tempC)):
-	# 				out = False
-	# 				break
-	# 	self.movePiece(to, c)
-	# 	self.setSquare(to, oldPiece)
-	# 	# if(out == True):
-	# 		# self.debugPrint()
-	# 	return out
-	
-	
 	def isCheckMate(self, team):
 		for tempC in [Coord(x,y) for x in range(8) for y in range(8)]:
 			if(self.getSquare(tempC).team == team):
 				if(len(self.getValidMoves(tempC))>0):
-					print(self.getSquare(tempC))
-					print(tempC,"can move to",[str(v) for v in self.getValidMoves(tempC)])
+					# print(self.getSquare(tempC))
+					# print(tempC,"can move to",[str(v) for v in self.getValidMoves(tempC)])
 					return False
 		return True
-	
 
 	def getValidMoves(self, c:Coord):
 		possible = self.getPossibleMoves(c)
@@ -269,6 +247,23 @@ class Game:
 		if(c.isValid() == False):
 			raise Exception("Invalid set, out of bounds: Tried to get at "+str(c))
 		self.board[c.y][c.x] = Piece(p.name, p.team, p.id, p.timeMoved)
+
+	def makeMove(self, fromC:Coord, toC:Coord): #True if move went through
+		try:
+			if toC not in self.getValidMoves(fromC):
+				return False
+		except:
+			return False
+		if(self.getSquare(fromC).team != self.turn):
+			return False
+		
+			
+		self.turnCount+=1
+		self.movePiece(fromC, toC)
+		self.log.append([fromC, toC])
+		self.board[toC.y][toC.x].timeMoved = self.turnCount
+		self.turn = 0 if self.turn == 1 else 1
+		return True
 
 	def debugPrint(self):
 		for row in self.board:

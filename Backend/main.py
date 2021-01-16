@@ -6,12 +6,21 @@ from CLI import printGame,printValidMoves,printPossibleMoves
     
 if __name__ == "__main__":
     g = Game()
-    c = Coord(5,6)
-    g.setSquare(c, Piece("queen", 1, 3, 1))
-    g.setSquare(Coord(7,4), Piece("bishop", 1, 3, 1))
     printGame(g)
-    printPossibleMoves(g, c)
-    # print(g.isCheckMate(1))
-    print(g.kingInCheck(0))
-    print(g.isCheckMate(0))
-    # print(g.getValidMoves(Coord(0,6)))
+    moveList = [
+        [Coord(5,6), Coord(5,4)],
+        [Coord(4,1), Coord(4,3)],
+        [Coord(6,6), Coord(6,4)],
+        [Coord(3,0), Coord(7,4)]
+    ]
+    for move in moveList:
+        print(g.makeMove(move[0], move[1]))
+        printGame(g)
+        if(g.isCheckMate(0)):
+            print("White wins by getting checkmated!")
+            break
+        if(g.isCheckMate(1)):
+            print("Black wins by getting checkmated!")
+            break
+    for move in g.log:
+        print(f"{move[0]} -> {move[1]}")
