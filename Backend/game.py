@@ -1,6 +1,5 @@
 from coord import Coord
 from piece import Piece
-from collections import Counter
 
 class Game:
 	def __init__(self):
@@ -253,8 +252,13 @@ class Game:
 		self.setSquare(fromC, Piece())
 		
 	def checkRepetition(self):
-		c = Counter(self.log)
-		
+		count = self.log.count(self.log[-1])
+		if count<3:
+			return False
+		count = self.log.count(self.log[-2])
+		if count<3:
+			return False
+		return True	
 
 	def getSquare(self, c:Coord):
 		if(c.isValid() == False):
