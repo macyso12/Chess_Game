@@ -110,8 +110,10 @@ class Game:
 			#capturing
 			deltas = [Coord(-1, 0)+forwards, Coord(1, 0)+forwards]
 			for delta in deltas:
-				
-					
+				t = c+delta
+				if self.getSquare(t).team == enemyTeam:
+					out.append(t)
+			"""Add en passant if extra time"""
 			return out
 	def getSquare(self, c:Coord):
 		if(c.isValid() == False):
