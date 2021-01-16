@@ -12,7 +12,7 @@
    width="45"
    height="45"
    id="svg44"
-   sodipodi:docname="black_king.svg"
+   sodipodi:docname="light_black_king.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <metadata
      id="metadata50">
@@ -22,6 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -61,7 +62,7 @@
      inkscape:groupmode="layer"
      id="layer1"
      inkscape:label="bg"
-     style="display:none;opacity:0.730769">
+     style="display:inline;opacity:0.730769">
     <rect
        style="fill:#ffe6d5;fill-opacity:1;stroke:none"
        id="rect57"

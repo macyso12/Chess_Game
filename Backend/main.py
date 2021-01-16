@@ -13,7 +13,7 @@ if __name__ == "__main__":
     clearGame(g)
 
     g.setSquare(Coord(0,4), Piece("king", 0, 1, 0))
-    g.setSquare(Coord(6,6), Piece("king", 1, 1, 0))
+    g.setSquare(Coord(6,6), Piece("king", 1, 2, 0))
     printGame(g)
     for move in testSets.REPETITION_TEST:
         if(g.makeMove(move[0], move[1])):
@@ -23,6 +23,6 @@ if __name__ == "__main__":
         printGame(g)
         
         print("Score:",g.getScore())
-        print("Repetition stalemate:",g.checkRepetition())
+        # print("Repetition stalemate:",g.checkRepetition())
     for move in g.log:
-        print(f"Move {move[0]} -> {move[1]}")
+        print(f"Move [{move[2]}] {move[0]} -> {move[1]}")

@@ -282,7 +282,7 @@ class Game:
 
 		self.turnCount+=1
 		self.movePiece(fromC, toC)
-		self.log.append([fromC, toC])
+		self.log.append([fromC, toC, self.getSquare(toC).id])
 		self.board[toC.y][toC.x].timeMoved = self.turnCount
 		queeningRank = 8*self.getSquare(toC).team
 		if self.getSquare(toC).name == "pawn" and toC.y == queeningRank:
