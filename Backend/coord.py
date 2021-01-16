@@ -1,0 +1,16 @@
+class Coord:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def isValid(self):
+        return self.x >=0 and self.x<=7 and self.y >=0 and self.y <=7
+
+    def __str__(self):
+        return f"({self.x}, {self.y})"
+    
+    def __add__(self, other):
+        out = Coord(self.x, self.y)
+        out.x+=other.x
+        out.y+=other.y
+        return out

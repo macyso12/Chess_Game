@@ -1,0 +1,7 @@
+class Piece:
+    def __init__(self, name:str = "null", team:int = -1, id:int = -1, timeMoved:int = 0):
+        self.name = name
+        self.team = team
+        self.id = id
+        self.timeMoved = timeMoved
+

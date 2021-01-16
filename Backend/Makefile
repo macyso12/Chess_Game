@@ -1,2 +1,6 @@
+
 main:
-	python3 chess.py
+	python3 main.py
+
+game:
+	python3 game.py
