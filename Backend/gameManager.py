@@ -13,14 +13,18 @@ def toJson(g:Game):
         "background": "light", "dark", or "red"
     }
     """
-    out = {}    
+    out = {"pieces":[]}
+    out["turn"] = g.turn
+    out["score"] = g.getScore()
+    out["winner"] = g.winner
+    # out["log"] = g.log
     for c in [Coord(x,y) for x in range(8) for y in range(8)]:
         piece = g.getSquare(c)
         if(piece.team != -1):
-            out[str(c)] = {"x":c.x, "y":c.y, 
+            out["pieces"].append({"x":c.x, "y":c.y, 
                 "piece":piece.name, "team":piece.team,
                 "background":"light" if (c.x+c.y)%2==0 else "dark"
-            }
+            })
     
     return out
     # print(out)

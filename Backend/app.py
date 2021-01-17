@@ -48,11 +48,26 @@ class apiHandler(Resource):
     def post(self):
         headers = request.headers
         game_id = headers["game"]
+        if(game_id not in manager.games.keys()):
+            return {"error": "game not in game manager"}
         g = manager.getGame(game_id)
+        if(headers["action"] == "move"):
+            fromC = Coord(headers["x1"],headers["y1"])
+            toC = Coord(headers["x2"],headers["y2"])
+            g.makeMove(fromC, toC)
+        if(headers["action"] == "getMoves"):
+            fromC = Coord(headers["x1"],headers["y1"])
+            valids = g.getValidMoves(fromC)
+            print([str(c) for c in valids])
+            out = {"coords":[]}
+            # ind = 0
+            for c in valids:
+                out["coords"].append({"x":c.x, "y":c.y})
+                # ind+=1
+            return out
         g.debugPrint()
-        g.setSquare(Coord(4,4), Piece("queen", 1, 14, 0))
-        g.debugPrint()
-        manager.getGame(game_id).debugPrint()
+        payload = {game_id:toJson(g)}
+        db.child("Games").set(payload)
         
         print(headers)
 
