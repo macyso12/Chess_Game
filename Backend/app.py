@@ -1,5 +1,5 @@
-import gamemanager
-from gamemanager import gameManager
+import gameManager
+from gameManager import gameManager
 import flask
 
 app = flask.Flask(__name__)
