@@ -284,14 +284,17 @@ class Game:
 
 	def makeMove(self, fromC:Coord, toC:Coord): #True if move went through
 		self.updateWinner()
-		try:
-			if toC not in self.getValidMoves(fromC):
-				return False
-		except:
+		# try:
+		if toC not in self.getValidMoves(fromC):
 			return False
+		# except Exception as e:
+		# 	print("ISSUE AT MAKE MOVE:",e)
+		# 	return False
+		print("Recieved move request")
+		print(fromC)
+		print(toC)
 		if(self.getSquare(fromC).team != self.turn):
 			return False
-		
 
 		self.turnCount+=1
 		self.movePiece(fromC, toC)
