@@ -1,8 +1,8 @@
 <template>
-  <div class="board">
+  <div class="board" v-show="showBoard">
     <div v-for="row in 8" :key="row">
-      <div v-for="col in 8" :key="col">
-        <chessSquare v-bind:row="row" v-bind:col="col" />
+      <div v-for="col in 8" :key="col" @click="clickMethod(row,col)">
+        <chessSquare v-bind:row="row" v-bind:col="col" v-bind:show="true" />
       </div>
     </div>
   </div>
@@ -16,6 +16,9 @@ import { defineComponent, ref } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'PageIndex',
+  props: {
+    showBoard: Boolean
+  },
   components: {
     TeamComponent,
     chessSquare
@@ -27,6 +30,12 @@ export default defineComponent({
       ...useFirebase()
     }
   },
+  methods: {
+    clickMethod(row, col) {
+      console.log("Square is at row: " + row + " col: " + col)
+      console.log("Show is " + this.show)
+    }
+  }
 })
 </script>
 
