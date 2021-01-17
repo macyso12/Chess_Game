@@ -54,7 +54,10 @@ class apiHandler(Resource):
         if(headers["action"] == "move"):
             fromC = Coord(headers["x1"],headers["y1"])
             toC = Coord(headers["x2"],headers["y2"])
-            g.makeMove(fromC, toC)
+            try:
+                g.makeMove(fromC, toC)
+            except Exception as e:
+                return {"error": "error at moving, message included.", "message":e}
         if(headers["action"] == "getMoves"):
             fromC = Coord(headers["x1"],headers["y1"])
             valids = g.getValidMoves(fromC)
