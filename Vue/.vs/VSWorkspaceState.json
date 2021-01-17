@@ -3,8 +3,11 @@
     "",
     "\\src",
     "\\src\\assets",
-    "\\src\\components"
+    "\\src\\assets\\images",
+    "\\src\\components",
+    "\\src\\layouts",
+    "\\src\\router"
   ],
-  "SelectedNode": "\\src\\assets\\word.jpg",
+  "SelectedNode": "\\src\\components\\chessSquare.vue",
   "PreviewInSolutionExplorer": false
 }
